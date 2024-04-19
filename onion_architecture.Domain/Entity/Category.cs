@@ -11,6 +11,7 @@ namespace onion_architecture.Domain.Entity
     {
         public long CategoriesId { get; set; }
         public string? CategoriesName { get; set; }
+        public ICollection<Fruit>? Fruits { get; set; }
 
     }
 }

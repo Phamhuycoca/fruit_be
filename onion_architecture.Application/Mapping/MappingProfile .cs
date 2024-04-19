@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using onion_architecture.Application.Features.Dto.UserDto;
 using onion_architecture.Application.Dto.Category;
+using onion_architecture.Application.Dto.Fruit;
 
 namespace onion_architecture.Application.Mapping
 {
@@ -24,7 +25,8 @@ namespace onion_architecture.Application.Mapping
             CreateMap<Category, CategoryCreate>().ReverseMap();
             CreateMap<Category, CategoryQuery>().ReverseMap();
 
-
+            CreateMap<Fruit,FruitQuery>().ReverseMap();
+            CreateMap<Fruit,FruitCreate>().ReverseMap();
 
         }
     }

@@ -13,6 +13,7 @@ using FluentValidation.AspNetCore;
 using onion_architecture.Infrastructure.Exceptions;
 using Microsoft.OpenApi.Models;
 using onion_architecture.Infrastructure.Settings;
+using CloudinaryDotNet;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -77,9 +78,18 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 
 
 
+IConfiguration configuration = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json")
+    .Build();
 
-
-
+var cloudinaryAccount = new Account(
+    configuration["Cloudinary:CloudName"],
+    configuration["Cloudinary:ApiKey"],
+    configuration["Cloudinary:ApiSecret"]
+);
+var cloudinary = new Cloudinary(cloudinaryAccount);
+builder.Services.AddSingleton(cloudinary);
 
 //ConnectStrings
 builder.Services.AddDbContext<onion_architecture_Context>(option =>

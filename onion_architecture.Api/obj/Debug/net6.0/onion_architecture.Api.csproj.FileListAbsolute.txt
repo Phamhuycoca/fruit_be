@@ -166,3 +166,4 @@ F:\DoHoangLinh\onion_architecture\onion_architecture.Api\obj\Debug\net6.0\refint
 F:\DoHoangLinh\onion_architecture\onion_architecture.Api\obj\Debug\net6.0\onion_architecture.Api.pdb
 F:\DoHoangLinh\onion_architecture\onion_architecture.Api\obj\Debug\net6.0\onion_architecture.Api.genruntimeconfig.cache
 F:\DoHoangLinh\onion_architecture\onion_architecture.Api\obj\Debug\net6.0\ref\onion_architecture.Api.dll
+F:\DoHoangLinh\onion_architecture\onion_architecture.Api\bin\Debug\net6.0\CloudinaryDotNet.dll
