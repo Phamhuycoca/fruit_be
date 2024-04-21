@@ -19,5 +19,6 @@ namespace onion_architecture.Domain.Entity
         public string? Avatar { get; set; }
         public string? Role { get; set; }
         public bool? Is_Active { get; set; }
+        public ICollection<Cart>? Carts { get; set; }
     }
 }

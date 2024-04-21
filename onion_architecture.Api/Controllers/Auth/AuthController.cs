@@ -21,5 +21,11 @@ namespace onion_architecture.Api.Controllers.Auth
         {
             return Ok(_authService.Login(dto));
         }
+        [AllowAnonymous]
+        [HttpPost("Register")]
+        public IActionResult Register(RegisterDto dto)
+        {
+            return Ok(_authService.Register(dto));
+        }
     }
 }

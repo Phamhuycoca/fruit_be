@@ -1,4 +1,5 @@
 ﻿using onion_architecture.Application.Features.Auth;
+using onion_architecture.Application.Features.Dto.UserDto;
 using onion_architecture.Application.Wrappers.Concrete;
 using onion_architecture.Domain.Entity;
 using System;
@@ -12,6 +13,7 @@ namespace onion_architecture.Application.IService
     public interface IAuthService
     {
         DataResponse<TokenDTO> Login(LoginDto dto);
+        DataResponse<User> Register(RegisterDto dto);
         TokenDTO CreateToken(User user);
 
     }

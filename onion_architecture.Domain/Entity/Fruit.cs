@@ -19,6 +19,8 @@ namespace onion_architecture.Domain.Entity
         public string? PriceDiscount {  get; set; }
         public string? FruitImg {  get; set; }
         public Category? Category { get; set; }
+        public ICollection<Cart>? Carts { get; set; }
+
 
     }
 }

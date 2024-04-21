@@ -17,6 +17,8 @@ namespace onion_architecture.Infrastructure.Context
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Fruit> Fruits { get; set; }
+        public virtual DbSet<Cart> Carts { get; set; }
+        public virtual DbSet<Store> Stores { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
@@ -36,6 +38,18 @@ namespace onion_architecture.Infrastructure.Context
                 e.ToTable("Fruits");
                 e.HasKey(e => e.FruitId);
                 e.HasOne(e=>e.Category).WithMany(e=>e.Fruits).HasForeignKey(e=>e.CategoriesId).OnDelete(DeleteBehavior.ClientSetNull);
+            });
+            modelBuilder.Entity<Cart>(e =>
+            {
+                e.ToTable("Carts");
+                e.HasKey(e => e.CartId);
+                e.HasOne(e => e.Fruit).WithMany(e => e.Carts).HasForeignKey(e => e.FruitId).OnDelete(DeleteBehavior.ClientSetNull);
+                e.HasOne(e => e.User).WithMany(e => e.Carts).HasForeignKey(e => e.UserId).OnDelete(DeleteBehavior.ClientSetNull);
+            });
+            modelBuilder.Entity<Store>(e =>
+            {
+                e.ToTable("Stores");
+                e.HasKey(e => e.StoreId);
             });
         }
     }

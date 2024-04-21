@@ -125,11 +125,20 @@ namespace onion_architecture.Application.Service
             var item = _fruitRepository.GetById(dto.FruitId);
             if (dto.fileImg != null)
             {
-                if (item.FruitImg != null)
+                if (item.FruitImg != null)              
                 {
                     upload.DeleteImage(item.FruitImg);
                 }
                 dto.FruitImg = upload.ImageUpload(dto.fileImg);
+            }
+            else
+            {
+                dto.FruitImg = item.FruitImg;
+            }
+            if (dto.Discount != null || dto.Discount == "0")
+            {
+                var price = double.Parse(dto.FruitPrice) - (double.Parse(dto.FruitPrice) * (double.Parse(dto.Discount) / 100));
+                dto.PriceDiscount = price.ToString();
             }
             var newData = _fruitRepository.Update(_mapper.Map(dto, item));
             if (newData != null)

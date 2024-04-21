@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using onion_architecture.Application.Features.Dto.UserDto;
 using onion_architecture.Application.Dto.Category;
 using onion_architecture.Application.Dto.Fruit;
+using onion_architecture.Application.Features.Auth;
+using onion_architecture.Application.Dto.Store;
 
 namespace onion_architecture.Application.Mapping
 {
@@ -19,6 +21,7 @@ namespace onion_architecture.Application.Mapping
             CreateMap<User, CreateUser>().ReverseMap();
             CreateMap<User, UpdateUser>().ReverseMap();
             CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<User, RegisterDto>().ReverseMap();
 
 
 
@@ -27,6 +30,9 @@ namespace onion_architecture.Application.Mapping
 
             CreateMap<Fruit,FruitQuery>().ReverseMap();
             CreateMap<Fruit,FruitCreate>().ReverseMap();
+
+            CreateMap<Store,StoreDto>().ReverseMap();
+            CreateMap<Store,StoreQuery>().ReverseMap();
 
         }
     }

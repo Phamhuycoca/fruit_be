@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using onion_architecture.Application.Common;
+using onion_architecture.Application.Dto.Fruit;
 using onion_architecture.Application.Features.Auth;
 using onion_architecture.Application.Features.Dto.UserDto;
 using onion_architecture.Application.IService;
@@ -12,6 +13,7 @@ using onion_architecture.Application.Wrappers.Concrete;
 using onion_architecture.Domain.Entity;
 using onion_architecture.Domain.Repositories;
 using onion_architecture.Infrastructure.Exceptions;
+using onion_architecture.Infrastructure.Repositories;
 using onion_architecture.Infrastructure.Settings;
 using System;
 using System.Collections.Generic;
@@ -110,6 +112,33 @@ namespace onion_architecture.Application.Service
             using var rnd = RandomNumberGenerator.Create();
             rnd.GetBytes(numberByte);
             return Convert.ToBase64String(numberByte);
+        }
+
+        public DataResponse<User> Register(RegisterDto dto)
+        {
+            var user = _userRepository.GetAll().Where(x => x.Email == dto.Email).SingleOrDefault();
+            if (user != null)
+            {
+                throw new ApiException(401, "Tài khoản dã tồn tại");
+            }
+            var userdto = new User(){
+                FullName=dto.FullName,
+                PassWord= PasswordHelper.CreateHashedPassword(dto.PassWord),
+                Email=dto.Email,
+                Role = "Người dùng",
+                Gender = "",
+                Address = "",
+                Avatar = "https://res.cloudinary.com/drhdgw1xx/image/upload/v1713533834/account_gzt5kr.png",
+                PhoneNumber = "",
+                UserId = 0,
+                Is_Active=false
+            };
+            var newData = _userRepository.Create(userdto);
+            if (newData != null)
+            {
+                return new DataResponse<User>(newData, HttpStatusCode.OK, "Đăng ký tài khoản thành công");
+            }
+            throw new ApiException(HttpStatusCode.BAD_REQUEST, "Đăng ký thất bại");
         }
     }
 }
