@@ -14,6 +14,7 @@ namespace onion_architecture.Domain.Entity
         public string StoreAddress{ get; set; }
         public string Lat { get; set; }//Vĩ độ
         public string Lng { get; set; }//Kinh độ
+        public string StoreType { get; set; }
         
     }
 }
