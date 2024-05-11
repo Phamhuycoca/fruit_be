@@ -119,6 +119,68 @@ namespace onion_architecture.Application.Service
             return new PagedDataResponse<FruitQuery>(paginatedResult, 200, query.Count());
         }
 
+        public PagedDataResponse<FruitQuery> Product(CommonListQueryProducts commonList)
+        {
+            var fruits = _mapper.Map<List<FruitQuery>>(_fruitRepository.GetAll());
+            var categories = _mapper.Map<List<CategoryQuery>>(_categoryRepository.GetAll());
+            var query = from fruit in fruits
+                        join
+                       category in categories on fruit.CategoriesId equals category.CategoriesId
+                        select
+                       new FruitQuery
+                       {
+                           CategoriesId = category.CategoriesId,
+                           CategoriesName = category.CategoriesName,
+                           Discount = fruit.Discount,
+                           FruitDescription = fruit.FruitDescription,
+                           FruitId = fruit.FruitId,
+                           FruitImg = fruit.FruitImg,
+                           FruitName = fruit.FruitName,
+                           FruitQuantity = fruit.FruitQuantity,
+                           FruitPrice = fruit.FruitPrice,
+                           PriceDiscount = fruit.PriceDiscount,
+                           createdAt = fruit.createdAt,
+                           createdBy = fruit.createdBy,
+                           deletedAt = fruit.deletedAt,
+                           deletedBy = fruit.deletedBy,
+                           IsDelete = fruit.IsDelete,
+                           updatedAt = fruit.updatedAt,
+                           updatedBy = fruit.updatedBy,
+                       };
+            if (!string.IsNullOrEmpty(commonList.keyword))
+            {
+                query = query.Where(x => x.FruitName.Contains(commonList.keyword) ||
+                x.FruitQuantity.Contains(commonList.keyword)||
+                x.FruitPrice.Contains(commonList.keyword)
+                ).ToList();
+            }
+            if(!string.IsNullOrEmpty(commonList.sale))
+            {
+                if (commonList.sale == "Đang giảm giá")
+                {
+                    query = query.Where(x => x.Discount != "0");
+                }
+                else
+                {
+                    query = query.Where(x => x.Discount == "0");
+                }
+            }
+            if (!string.IsNullOrEmpty(commonList.price))
+            {
+                if (commonList.price == "Từ thấp đến cao")
+                {
+                    query = query.OrderBy(x=>x.FruitPrice);
+                }
+                else if(commonList.price == "Từ cao đến thấp")
+                {
+                    query = query.OrderByDescending(x=>x.FruitPrice);
+                }
+            }
+
+                var paginatedResult = PaginatedList<FruitQuery>.ToPageList(query.ToList(), commonList.page, commonList.limit);
+            return new PagedDataResponse<FruitQuery>(paginatedResult, 200, query.Count());
+        }
+
         public DataResponse<FruitQuery> Update(FruitCreate dto)
         {
             UpLoadImage upload = new UpLoadImage(_cloudinary);

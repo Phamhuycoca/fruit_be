@@ -13,6 +13,7 @@ namespace onion_architecture.Application.IService
     public interface IFruitService
     {
         PagedDataResponse<FruitQuery> Items(CommonListQuery commonList);
+        PagedDataResponse<FruitQuery> Product(CommonListQueryProducts commonList);
         DataResponse<FruitQuery> Create(FruitCreate dto);
         DataResponse<FruitQuery> Update(FruitCreate dto);
         DataResponse<FruitQuery> Delete(long id);

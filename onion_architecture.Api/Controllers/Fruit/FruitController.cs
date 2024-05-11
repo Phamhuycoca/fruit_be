@@ -17,8 +17,13 @@ namespace onion_architecture.Api.Controllers.Fruit
         {
             _fruitService = fruitService;
         }
+        [HttpGet("GetAllProducts")]
+        public IActionResult GetAllProducts([FromQuery] CommonListQueryProducts query) 
+        {
+            return Ok(_fruitService.Product(query));
+        }
         [HttpGet]
-        public IActionResult GetAll([FromQuery] CommonListQuery query) 
+        public IActionResult GetAll([FromQuery] CommonListQuery query)
         {
             return Ok(_fruitService.Items(query));
         }

@@ -24,8 +24,4 @@
     <ProjectReference Include="..\onion_architecture.Domain\onion_architecture.Domain.csproj" />
     <ProjectReference Include="..\onion_architecture.Infrastructure\onion_architecture.Infrastructure.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Dto\Cart\" />
-  </ItemGroup>
 </Project>

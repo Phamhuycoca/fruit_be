@@ -12,8 +12,8 @@ using onion_architecture.Infrastructure.Context;
 namespace onion_architecture.Infrastructure.Migrations
 {
     [DbContext(typeof(onion_architecture_Context))]
-    [Migration("20240419131438_fruits")]
-    partial class fruits
+    [Migration("20240511062607_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,53 @@ namespace onion_architecture.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("onion_architecture.Domain.Entity.Cart", b =>
+                {
+                    b.Property<long>("CartId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("CartId"), 1L, 1);
+
+                    b.Property<long>("FruitId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("Quantity")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("createdAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("createdBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("deletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("deletedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("updatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("updatedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("CartId");
+
+                    b.HasIndex("FruitId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Carts", (string)null);
+                });
 
             modelBuilder.Entity("onion_architecture.Domain.Entity.Category", b =>
                 {
@@ -72,8 +119,8 @@ namespace onion_architecture.Infrastructure.Migrations
                     b.Property<long>("CategoriesId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("Discount")
-                        .HasColumnType("bigint");
+                    b.Property<string>("Discount")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FruitDescription")
                         .HasColumnType("nvarchar(max)");
@@ -87,14 +134,14 @@ namespace onion_architecture.Infrastructure.Migrations
                     b.Property<string>("FruitPrice")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("FruitQuantity")
-                        .HasColumnType("int");
+                    b.Property<string>("FruitQuantity")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
-                    b.Property<long?>("PriceDiscount")
-                        .HasColumnType("bigint");
+                    b.Property<string>("PriceDiscount")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime2");
@@ -119,6 +166,60 @@ namespace onion_architecture.Infrastructure.Migrations
                     b.HasIndex("CategoriesId");
 
                     b.ToTable("Fruits", (string)null);
+                });
+
+            modelBuilder.Entity("onion_architecture.Domain.Entity.Store", b =>
+                {
+                    b.Property<long>("StoreId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("StoreId"), 1L, 1);
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Lat")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Lng")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StoreAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StoreName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StoreType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("createdAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("createdBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("deletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("deletedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("updatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("updatedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("StoreId");
+
+                    b.ToTable("Stores", (string)null);
                 });
 
             modelBuilder.Entity("onion_architecture.Domain.Entity.User", b =>
@@ -182,6 +283,23 @@ namespace onion_architecture.Infrastructure.Migrations
                     b.ToTable("User", (string)null);
                 });
 
+            modelBuilder.Entity("onion_architecture.Domain.Entity.Cart", b =>
+                {
+                    b.HasOne("onion_architecture.Domain.Entity.Fruit", "Fruit")
+                        .WithMany("Carts")
+                        .HasForeignKey("FruitId")
+                        .IsRequired();
+
+                    b.HasOne("onion_architecture.Domain.Entity.User", "User")
+                        .WithMany("Carts")
+                        .HasForeignKey("UserId")
+                        .IsRequired();
+
+                    b.Navigation("Fruit");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("onion_architecture.Domain.Entity.Fruit", b =>
                 {
                     b.HasOne("onion_architecture.Domain.Entity.Category", "Category")
@@ -195,6 +313,16 @@ namespace onion_architecture.Infrastructure.Migrations
             modelBuilder.Entity("onion_architecture.Domain.Entity.Category", b =>
                 {
                     b.Navigation("Fruits");
+                });
+
+            modelBuilder.Entity("onion_architecture.Domain.Entity.Fruit", b =>
+                {
+                    b.Navigation("Carts");
+                });
+
+            modelBuilder.Entity("onion_architecture.Domain.Entity.User", b =>
+                {
+                    b.Navigation("Carts");
                 });
 #pragma warning restore 612, 618
         }
