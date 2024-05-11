@@ -18,6 +18,8 @@ namespace onion_architecture.Application.Dto.Fruit
         public string? Discount { get; set; }
         public string? PriceDiscount { get; set; }
         public string? FruitImg { get; set; }
+        public long StoreId { get; set; }
+        public string StoreName { get; set; }
         public string? CategoriesName { get; set; }
 
     }

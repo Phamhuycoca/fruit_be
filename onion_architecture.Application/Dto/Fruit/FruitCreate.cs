@@ -18,6 +18,7 @@ namespace onion_architecture.Application.Dto.Fruit
         public string? Discount { get; set; }
         public string? PriceDiscount { get; set; }
         public string? FruitImg { get; set; }
+        public long StoreId { get; set; }
         public IFormFile? fileImg { get; set; }
     }
 }

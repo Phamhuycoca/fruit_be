@@ -10,6 +10,7 @@ using onion_architecture.Application.Dto.Category;
 using onion_architecture.Application.Dto.Fruit;
 using onion_architecture.Application.Features.Auth;
 using onion_architecture.Application.Dto.Store;
+using onion_architecture.Application.Dto.Cart;
 
 namespace onion_architecture.Application.Mapping
 {
@@ -33,6 +34,11 @@ namespace onion_architecture.Application.Mapping
 
             CreateMap<Store,StoreDto>().ReverseMap();
             CreateMap<Store,StoreQuery>().ReverseMap();
+
+            CreateMap<Cart, CartQuery>().ReverseMap();
+            CreateMap<Cart, CartDto>().ReverseMap();
+            CreateMap<Cart, CartFruit>().ReverseMap();
+
 
         }
     }

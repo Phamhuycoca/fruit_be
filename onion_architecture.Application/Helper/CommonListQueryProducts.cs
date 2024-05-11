@@ -11,7 +11,7 @@ namespace onion_architecture.Application.Helper
         public int page { get; set; }
         public int limit { get; set; }
         public string? keyword { get; set; }
-        public long CategoriesId { get; set; }
+        public long? CategoriesId { get; set; }
         public string? price {  get; set; }
         public string? sale { get; set; }
         public CommonListQueryProducts()

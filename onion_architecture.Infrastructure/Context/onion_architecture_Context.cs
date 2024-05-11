@@ -38,6 +38,7 @@ namespace onion_architecture.Infrastructure.Context
                 e.ToTable("Fruits");
                 e.HasKey(e => e.FruitId);
                 e.HasOne(e=>e.Category).WithMany(e=>e.Fruits).HasForeignKey(e=>e.CategoriesId).OnDelete(DeleteBehavior.ClientSetNull);
+                e.HasOne(e=>e.Store).WithMany(e=>e.Fruits).HasForeignKey(e=>e.StoreId).OnDelete(DeleteBehavior.ClientSetNull);
             });
             modelBuilder.Entity<Cart>(e =>
             {

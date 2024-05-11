@@ -2,6 +2,7 @@
 using CloudinaryDotNet;
 using onion_architecture.Application.Dto.Category;
 using onion_architecture.Application.Dto.Fruit;
+using onion_architecture.Application.Dto.Store;
 using onion_architecture.Application.Helper;
 using onion_architecture.Application.IService;
 using onion_architecture.Application.Wrappers.Concrete;
@@ -23,12 +24,14 @@ namespace onion_architecture.Application.Service
         private readonly IMapper _mapper;
         private readonly Cloudinary _cloudinary;
         private readonly ICategoryRepository _categoryRepository;
-        public FruitService(IFruitRepository fruitRepository, IMapper mapper,Cloudinary cloudinary, ICategoryRepository categoryRepository)
+        private readonly IStoreRepository _storeRepository;
+        public FruitService(IFruitRepository fruitRepository, IMapper mapper,Cloudinary cloudinary, ICategoryRepository categoryRepository, IStoreRepository storeRepository)
         {
             _fruitRepository = fruitRepository;
             _mapper = mapper;
             _cloudinary = cloudinary;
             _categoryRepository = categoryRepository;
+            _storeRepository = storeRepository;
         }
 
         public DataResponse<FruitQuery> Create(FruitCreate dto)
@@ -85,9 +88,12 @@ namespace onion_architecture.Application.Service
         {
             var fruits = _mapper.Map<List<FruitQuery>>(_fruitRepository.GetAll());
             var categories=_mapper.Map<List<CategoryQuery>>(_categoryRepository.GetAll());
+            var stores = _mapper.Map<List<StoreQuery>>(_storeRepository.GetAll());
             var query = from fruit in fruits
                         join
                        category in categories on fruit.CategoriesId equals category.CategoriesId
+                       join 
+                       store in stores on fruit.StoreId equals store.StoreId
                         select
                        new FruitQuery
                        {
@@ -108,6 +114,8 @@ namespace onion_architecture.Application.Service
                            IsDelete=fruit.IsDelete,
                            updatedAt=fruit.updatedAt,
                            updatedBy=fruit.updatedBy,
+                           StoreId=fruit.StoreId,
+                           StoreName=store.StoreName
                        };
             if (!string.IsNullOrEmpty(commonList.keyword))
             {
@@ -123,9 +131,12 @@ namespace onion_architecture.Application.Service
         {
             var fruits = _mapper.Map<List<FruitQuery>>(_fruitRepository.GetAll());
             var categories = _mapper.Map<List<CategoryQuery>>(_categoryRepository.GetAll());
+            var stores = _mapper.Map<List<StoreQuery>>(_storeRepository.GetAll());
             var query = from fruit in fruits
                         join
                        category in categories on fruit.CategoriesId equals category.CategoriesId
+                        join
+                        store in stores on fruit.StoreId equals store.StoreId
                         select
                        new FruitQuery
                        {
@@ -146,6 +157,8 @@ namespace onion_architecture.Application.Service
                            IsDelete = fruit.IsDelete,
                            updatedAt = fruit.updatedAt,
                            updatedBy = fruit.updatedBy,
+                           StoreId = fruit.StoreId,
+                           StoreName = store.StoreName
                        };
             if (!string.IsNullOrEmpty(commonList.keyword))
             {
@@ -176,7 +189,11 @@ namespace onion_architecture.Application.Service
                     query = query.OrderByDescending(x=>x.FruitPrice);
                 }
             }
-
+           
+            if (!string.IsNullOrEmpty(commonList.CategoriesId.ToString()))
+            {
+                query = query.Where(x => x.CategoriesId == commonList.CategoriesId);
+            }
                 var paginatedResult = PaginatedList<FruitQuery>.ToPageList(query.ToList(), commonList.page, commonList.limit);
             return new PagedDataResponse<FruitQuery>(paginatedResult, 200, query.Count());
         }

@@ -32,6 +32,7 @@ namespace onion_architecture.Application.Module
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IFruitService, FruitService>();
             services.AddScoped<IStoreService, StoreService>();
+            services.AddScoped<ICartService, CartService>();
             return services;
         }
     }
