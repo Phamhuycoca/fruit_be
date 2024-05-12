@@ -10,11 +10,12 @@ namespace onion_architecture.Application.Dto.Store
     public class StoreQuery:BaseEntity
     {
         public long StoreId { get; set; }
-        public string StoreName { get; set; }
-        public string StoreAddress { get; set; }
-        public string Lat { get; set; }//Vĩ độ
-        public string Lng { get; set; }//Kinh độ
-        public string StoreType { get; set; }
+        public string? StoreName { get; set; }
+        public string? StoreAddress { get; set; }
+        public string? Lat { get; set; }//Vĩ độ
+        public string? Lng { get; set; }//Kinh độ
+        public string? StoreType { get; set; }
+        public string? StorePhone { get; set; }
 
     }
 }

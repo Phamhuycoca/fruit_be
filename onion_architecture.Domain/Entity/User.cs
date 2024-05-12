@@ -20,5 +20,6 @@ namespace onion_architecture.Domain.Entity
         public string? Role { get; set; }
         public bool? Is_Active { get; set; }
         public ICollection<Cart>? Carts { get; set; }
+        public ICollection<Refresh_Token>? Refresh_Tokens{ get; set; }
     }
 }

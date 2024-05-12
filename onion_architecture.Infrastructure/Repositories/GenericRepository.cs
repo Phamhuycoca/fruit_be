@@ -79,26 +79,26 @@ namespace onion_architecture.Infrastructure.Repositories
             return item;
         }
 
-        public T Update(T entity)
-        {
-            if (!_dbSet.Any(e => e == entity))
-            {
-                throw new ApiException(404, "Không tìm thấy thông tin");
-            }
-            entity.updatedAt = DateTime.Now;
-            _context.Entry(entity).State = EntityState.Modified;
-            try
-            {
-                _context.SaveChanges();
-                return entity;
+        /* public T Update(T entity)
+         {
+             if (!_dbSet.Any(e => e == entity))
+             {
+                 throw new ApiException(404, "Không tìm thấy thông tin");
+             }
+             entity.updatedAt = DateTime.Now;
+             _context.Entry(entity).State = EntityState.Modified;
+             try
+             {
+                 _context.SaveChanges();
+                 return entity;
 
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
-        }
-       /* public T Update(T entity)
+             }
+             catch (DbUpdateConcurrencyException)
+             {
+                 throw;
+             }
+         }*/
+        public T Update(T entity)
         {
             var entry = _context.Entry(entity);
 
@@ -123,7 +123,7 @@ namespace onion_architecture.Infrastructure.Repositories
             {
                 throw;
             }
-        }*/
+        }
         private IEnumerable<object> GetKeyValues(T entity)
         {
             var keyProperties = _context.Model.FindEntityType(typeof(T)).FindPrimaryKey().Properties;

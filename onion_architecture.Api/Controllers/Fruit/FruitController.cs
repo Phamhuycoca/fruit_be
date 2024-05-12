@@ -5,6 +5,7 @@ using onion_architecture.Application.Dto.Fruit;
 using onion_architecture.Application.Helper;
 using onion_architecture.Application.IService;
 using onion_architecture.Application.Service;
+using System.Runtime.InteropServices;
 
 namespace onion_architecture.Api.Controllers.Fruit
 {
@@ -49,6 +50,11 @@ namespace onion_architecture.Api.Controllers.Fruit
         public IActionResult GetById(long id)
         {
             return Ok(_fruitService.GetById(id));
+        }
+        [HttpGet("ProductByStore/{id}")]
+        public IActionResult ProductByStore([FromQuery] CommonListQueryProducts query,long id)
+        {
+            return Ok(_fruitService.ProductByStore(query,id));
         }
     }
 }

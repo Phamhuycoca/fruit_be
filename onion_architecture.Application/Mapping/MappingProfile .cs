@@ -23,6 +23,7 @@ namespace onion_architecture.Application.Mapping
             CreateMap<User, UpdateUser>().ReverseMap();
             CreateMap<User, UserDto>().ReverseMap();
             CreateMap<User, RegisterDto>().ReverseMap();
+            CreateMap<Refresh_Token, Refresh_TokenDto>().ReverseMap();
 
 
 
@@ -38,6 +39,7 @@ namespace onion_architecture.Application.Mapping
             CreateMap<Cart, CartQuery>().ReverseMap();
             CreateMap<Cart, CartDto>().ReverseMap();
             CreateMap<Cart, CartFruit>().ReverseMap();
+
 
 
         }

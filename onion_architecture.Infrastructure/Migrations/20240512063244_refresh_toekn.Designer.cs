@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using onion_architecture.Infrastructure.Context;
 
@@ -11,9 +12,10 @@ using onion_architecture.Infrastructure.Context;
 namespace onion_architecture.Infrastructure.Migrations
 {
     [DbContext(typeof(onion_architecture_Context))]
-    partial class onion_architecture_ContextModelSnapshot : ModelSnapshot
+    [Migration("20240512063244_refresh_toekn")]
+    partial class refresh_toekn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -238,10 +240,8 @@ namespace onion_architecture.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("StorePhone")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("StoreType")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("createdAt")

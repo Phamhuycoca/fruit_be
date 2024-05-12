@@ -18,6 +18,7 @@ namespace onion_architecture.Infrastructure.Module
             services.AddScoped<IFruitRepository, FruitRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<IStoreRepository, StoreRepository>();
+            services.AddScoped<IRefresh_TokenRepository, Refresh_TokenRepository>();
             return services;
         }
     }

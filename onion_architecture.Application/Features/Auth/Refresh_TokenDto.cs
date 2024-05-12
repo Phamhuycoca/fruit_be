@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace onion_architecture.Application.Features.Auth
 {
-    public class TokenDTO
+    public class Refresh_TokenDto
     {
-        public string AccessToken { get; set; }
-        public int AccessTokenExpiration { get; set; }
-        public string RefreshToken { get; set; }
+        public long UserId { get; set; }
+        public DateTime Refresh_TokenExpires { get; set; }
+        public string? RefreshToken { get; set; }
         public int RefreshTokenExpiration { get; set; }
-        public string? Role { get; set; }
-
     }
 }

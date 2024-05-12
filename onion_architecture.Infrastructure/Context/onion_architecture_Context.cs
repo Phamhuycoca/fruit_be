@@ -19,6 +19,7 @@ namespace onion_architecture.Infrastructure.Context
         public virtual DbSet<Fruit> Fruits { get; set; }
         public virtual DbSet<Cart> Carts { get; set; }
         public virtual DbSet<Store> Stores { get; set; }
+        public virtual DbSet<Refresh_Token> Refresh_Tokens { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
@@ -51,6 +52,12 @@ namespace onion_architecture.Infrastructure.Context
             {
                 e.ToTable("Stores");
                 e.HasKey(e => e.StoreId);
+            });
+            modelBuilder.Entity<Refresh_Token>(e =>
+            {
+                e.ToTable("RefreshTokens");
+                e.HasKey(e => e.UserId);
+                e.HasOne(e => e.User).WithMany(e => e.Refresh_Tokens).HasForeignKey(e => e.UserId).OnDelete(DeleteBehavior.ClientSetNull);
             });
         }
     }

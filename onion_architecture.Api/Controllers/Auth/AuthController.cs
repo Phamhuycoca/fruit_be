@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using onion_architecture.Application.Features.Auth;
 using onion_architecture.Application.IService;
+using onion_architecture.Infrastructure.Settings;
 
 namespace onion_architecture.Api.Controllers.Auth
 {
@@ -26,6 +27,12 @@ namespace onion_architecture.Api.Controllers.Auth
         public IActionResult Register(RegisterDto dto)
         {
             return Ok(_authService.Register(dto));
+        }
+        [Authorize]
+        [HttpPost("Refresh_token")]
+        public IActionResult Refresh_token([FromBody] RefreshTokenSettings refreshToken)
+        {
+            return Ok(_authService.Refresh_Token(refreshToken));
         }
     }
 }

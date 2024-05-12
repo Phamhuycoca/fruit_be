@@ -14,6 +14,7 @@ namespace onion_architecture.Application.IService
     {
         PagedDataResponse<FruitQuery> Items(CommonListQuery commonList);
         PagedDataResponse<FruitQuery> Product(CommonListQueryProducts commonList);
+        PagedDataResponse<FruitQuery> ProductByStore(CommonListQueryProducts commonList,long id);
         DataResponse<FruitQuery> Create(FruitCreate dto);
         DataResponse<FruitQuery> Update(FruitCreate dto);
         DataResponse<FruitQuery> Delete(long id);
