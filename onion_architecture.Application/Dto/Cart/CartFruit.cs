@@ -15,5 +15,7 @@ namespace onion_architecture.Application.Dto.Cart
         public string? FruitName { get; set; }
         public string? FruitPrice { get; set; }
         public string? FruitImg { get; set; }
+        public long StoreId { get; set; }
+
     }
 }

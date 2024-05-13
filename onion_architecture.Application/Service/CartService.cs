@@ -38,7 +38,7 @@ namespace onion_architecture.Application.Service
                 var newData = _cartRepository.Create(_mapper.Map<Cart>(dto));
                 if (newData != null)
                 {
-                    var fruit = _fruitRepository.GetById(newData.FruitId);
+                   /* var fruit = _fruitRepository.GetById(newData.FruitId);
                     var fruitdto = new FruitCreate()
                     {
                         Discount=fruit.Discount,
@@ -52,7 +52,7 @@ namespace onion_architecture.Application.Service
                         PriceDiscount=fruit.PriceDiscount,
                         StoreId=dto.StoreId,
                     };
-                    _fruitRepository.Update(_mapper.Map(fruitdto, fruit));
+                    _fruitRepository.Update(_mapper.Map(fruitdto, fruit));*/
                     return new DataResponse<CartQuery>(_mapper.Map<CartQuery>(newData), 200, "Thêm giỏ hàng thành công");
                 }
             }
@@ -69,6 +69,7 @@ namespace onion_architecture.Application.Service
                 dto.Quantity = item.Quantity - dto.Quantity;
                 _cartRepository.Update(_mapper.Map(dto, item));*/
                 var newData = _cartRepository.Update(_mapper.Map(dto, item));
+               /*
                 var fruit = _fruitRepository.GetById(newData.FruitId);
                 var fruitdto = new FruitCreate()
                 {
@@ -83,7 +84,7 @@ namespace onion_architecture.Application.Service
                     PriceDiscount = fruit.PriceDiscount,
                     StoreId = dto.StoreId,
                 };
-                _fruitRepository.Update(_mapper.Map(fruitdto, fruit));
+                _fruitRepository.Update(_mapper.Map(fruitdto, fruit));*/
                 return new DataResponse<CartQuery>(_mapper.Map<CartQuery>(newData), 200, "Thêm giỏ hàng thành công");
 
             }
@@ -125,7 +126,8 @@ namespace onion_architecture.Application.Service
                             FruitName = fruit.FruitName,
                             FruitPrice = fruit.FruitPrice,
                             Quantity = cart.Quantity,
-                            UserId = cart.UserId
+                            UserId = cart.UserId,
+                            StoreId= cart.StoreId
                         };
             var paginatedResult = PaginatedList<CartFruit>.ToPageList(query.ToList(), commonList.page, commonList.limit);
             return new PagedDataResponse<CartFruit>(paginatedResult, 200, query.Count());
