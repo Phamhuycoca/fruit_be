@@ -65,5 +65,16 @@ namespace onion_architecture.Api.Controllers.Cart
         {
             return Ok(_cartService.GetById(id));
         }
+        [HttpPatch("TangGiamCartItem")]
+        public IActionResult TangGiamCartItem(CartDto dto) 
+        {
+            var objId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (objId == null)
+            {
+                throw new ApiException(HttpStatusCode.FORBIDDEN, HttpStatusMessages.Forbidden);
+            }
+            dto.UserId = long.Parse(objId);
+            return Ok(_cartService.TangGiamCartItem(dto));
+        }
     }
 }

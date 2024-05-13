@@ -22,18 +22,70 @@ namespace onion_architecture.Application.Service
         private readonly ICartRepository _cartRepository;
         private readonly IMapper _mapper;
         private readonly IFruitRepository _fruitRepository;
-        public CartService(ICartRepository cartRepository, IMapper mapper, IFruitRepository fruitRepository)
+        private readonly IStoreRepository _storeRepository;
+        public CartService(ICartRepository cartRepository, IMapper mapper, IFruitRepository fruitRepository,IStoreRepository storeRepository)
         {
             _cartRepository = cartRepository;
             _mapper = mapper;
             _fruitRepository = fruitRepository;
+            _storeRepository = storeRepository;
         }
         public DataResponse<CartQuery> Create(CartDto dto)
         {
-            var newData = _cartRepository.Create(_mapper.Map<Cart>(dto));
-            if (newData != null)
+            var checkCartItem = _cartRepository.GetAll().Where(x=>x.FruitId==dto.FruitId).SingleOrDefault();
+            if (checkCartItem == null)
+            {                
+                var newData = _cartRepository.Create(_mapper.Map<Cart>(dto));
+                if (newData != null)
+                {
+                    var fruit = _fruitRepository.GetById(newData.FruitId);
+                    var fruitdto = new FruitCreate()
+                    {
+                        Discount=fruit.Discount,
+                        CategoriesId=fruit.CategoriesId,
+                        FruitImg = fruit.FruitImg,
+                        FruitDescription=fruit.FruitDescription,
+                        FruitId=fruit.FruitId,
+                        FruitName=fruit.FruitName,
+                        FruitPrice=fruit.FruitPrice,
+                        FruitQuantity=(long.Parse(fruit.FruitQuantity)-dto.Quantity).ToString(),
+                        PriceDiscount=fruit.PriceDiscount,
+                        StoreId=dto.StoreId,
+                    };
+                    _fruitRepository.Update(_mapper.Map(fruitdto, fruit));
+                    return new DataResponse<CartQuery>(_mapper.Map<CartQuery>(newData), 200, "Thêm giỏ hàng thành công");
+                }
+            }
+            else
             {
+                var item = _cartRepository.GetAll().Where(x=>x.FruitId==dto.FruitId).SingleOrDefault();
+                dto.Quantity = item.Quantity+1;
+                dto.CartId = item.CartId;
+                if (item == null)
+                {
+                    throw new ApiException(404, "Không tìm thấy thông tin");
+                }
+               /* var cart = _cartRepository.GetById(dto.FruitId);
+                dto.Quantity = item.Quantity - dto.Quantity;
+                _cartRepository.Update(_mapper.Map(dto, item));*/
+                var newData = _cartRepository.Update(_mapper.Map(dto, item));
+                var fruit = _fruitRepository.GetById(newData.FruitId);
+                var fruitdto = new FruitCreate()
+                {
+                    Discount = fruit.Discount,
+                    CategoriesId = fruit.CategoriesId,
+                    FruitImg = fruit.FruitImg,
+                    FruitDescription = fruit.FruitDescription,
+                    FruitId = fruit.FruitId,
+                    FruitName = fruit.FruitName,
+                    FruitPrice = fruit.FruitPrice,
+                    FruitQuantity = (long.Parse(fruit.FruitQuantity) - dto.Quantity).ToString(),
+                    PriceDiscount = fruit.PriceDiscount,
+                    StoreId = dto.StoreId,
+                };
+                _fruitRepository.Update(_mapper.Map(fruitdto, fruit));
                 return new DataResponse<CartQuery>(_mapper.Map<CartQuery>(newData), 200, "Thêm giỏ hàng thành công");
+
             }
             throw new ApiException(400, "Thêm mới không thành công");
         }
@@ -65,27 +117,43 @@ namespace onion_architecture.Application.Service
             var query = from cart in carts
                         join
                        fruit in fruits on cart.FruitId equals fruit.FruitId
-                        select new CartFruit 
+                        select new CartFruit
                         {
-                            CartId=cart.CartId,
-                            FruitId=cart.FruitId,
-                            FruitImg=fruit.FruitImg,
-                            FruitName=fruit.FruitName,
-                            FruitPrice=fruit.FruitPrice,
-                            Quantity=cart.Quantity,
+                            CartId = cart.CartId,
+                            FruitId = cart.FruitId,
+                            FruitImg = fruit.FruitImg,
+                            FruitName = fruit.FruitName,
+                            FruitPrice = fruit.FruitPrice,
+                            Quantity = cart.Quantity,
                             UserId = cart.UserId
                         };
             var paginatedResult = PaginatedList<CartFruit>.ToPageList(query.ToList(), commonList.page, commonList.limit);
             return new PagedDataResponse<CartFruit>(paginatedResult, 200, query.Count());
         }
 
-       /* public PagedDataResponse<CartQuery> Items(CommonListQuery commonList, long id)
+        public bool TangGiamCartItem(CartDto item)
         {
-            var query = _mapper.Map<List<CartQuery>>(_cartRepository.GetAll().Where(x=>x.UserId==id));
-            var fruits = _mapper.Map<List<FruitQuery>>(_fruitRepository.GetAll());
-            var paginatedResult = PaginatedList<CartQuery>.ToPageList(query, commonList.page, commonList.limit);
-            return new PagedDataResponse<CartQuery>(paginatedResult, 200, query.Count());
-        }*/
+            var cart = _cartRepository.GetById(item.CartId);
+            if (cart == null)
+            {
+                throw new ApiException(404, "Không tìm thấy thông tin");
+            }
+            var newData = _cartRepository.Update(_mapper.Map(item, cart));
+            if (newData == null)
+            {
+                return false;
+            }
+            return true;
+
+        }
+
+        /* public PagedDataResponse<CartQuery> Items(CommonListQuery commonList, long id)
+         {
+             var query = _mapper.Map<List<CartQuery>>(_cartRepository.GetAll().Where(x=>x.UserId==id));
+             var fruits = _mapper.Map<List<FruitQuery>>(_fruitRepository.GetAll());
+             var paginatedResult = PaginatedList<CartQuery>.ToPageList(query, commonList.page, commonList.limit);
+             return new PagedDataResponse<CartQuery>(paginatedResult, 200, query.Count());
+         }*/
 
         public DataResponse<CartQuery> Update(CartDto dto)
         {

@@ -18,5 +18,6 @@ namespace onion_architecture.Application.IService
         DataResponse<CartQuery> Update(CartDto dto);
         DataResponse<CartQuery> Delete(long id);
         DataResponse<CartQuery> GetById(long id);
+        bool TangGiamCartItem(CartDto item);
     }
 }
