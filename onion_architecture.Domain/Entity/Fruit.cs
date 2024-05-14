@@ -22,6 +22,7 @@ namespace onion_architecture.Domain.Entity
         public Store? Store { get; set; }
         public Category? Category { get; set; }
         public ICollection<Cart>? Carts { get; set; }
+        public ICollection<Bill_Detail>? Bill_Details { get; set; }
 
 
     }

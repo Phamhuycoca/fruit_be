@@ -21,5 +21,7 @@ namespace onion_architecture.Domain.Entity
         public bool? Is_Active { get; set; }
         public ICollection<Cart>? Carts { get; set; }
         public ICollection<Refresh_Token>? Refresh_Tokens{ get; set; }
+        public ICollection<Bill>? Bills { get; set; }
+
     }
 }

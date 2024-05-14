@@ -20,6 +20,9 @@ namespace onion_architecture.Infrastructure.Context
         public virtual DbSet<Cart> Carts { get; set; }
         public virtual DbSet<Store> Stores { get; set; }
         public virtual DbSet<Refresh_Token> Refresh_Tokens { get; set; }
+        public virtual DbSet<Bill> Bills { get; set; }
+        public virtual DbSet<Bill_Detail> Bill_Details { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
@@ -59,6 +62,19 @@ namespace onion_architecture.Infrastructure.Context
                 e.ToTable("RefreshTokens");
                 e.HasKey(e => e.UserId);
                 e.HasOne(e => e.User).WithMany(e => e.Refresh_Tokens).HasForeignKey(e => e.UserId).OnDelete(DeleteBehavior.ClientSetNull);
+            });
+            modelBuilder.Entity<Bill>(e =>
+            {
+                e.ToTable("Bills");
+                e.HasKey(e => e.BillId);
+                e.HasOne(e => e.User).WithMany(e => e.Bills).HasForeignKey(e => e.UserId).OnDelete(DeleteBehavior.ClientSetNull);
+            });
+            modelBuilder.Entity<Bill_Detail>(e =>
+            {
+                e.ToTable("Bill_Details");
+                e.HasKey(e => e.Bill_Detail_Id);
+                e.HasOne(e => e.Fruit).WithMany(e => e.Bill_Details).HasForeignKey(e => e.FruitId).OnDelete(DeleteBehavior.ClientSetNull);
+                e.HasOne(e => e.Bill).WithMany(e => e.Bill_Details).HasForeignKey(e => e.BillId).OnDelete(DeleteBehavior.ClientSetNull);
             });
         }
     }

@@ -11,6 +11,8 @@ using onion_architecture.Application.Mapping;
 using onion_architecture.Application.IService;
 using onion_architecture.Application.Service;
 using FluentValidation;
+using onion_architecture.Application.Common.ZaloPay;
+using onion_architecture.Application.Dto;
 
 namespace onion_architecture.Application.Module
 {
@@ -33,6 +35,10 @@ namespace onion_architecture.Application.Module
             services.AddScoped<IFruitService, FruitService>();
             services.AddScoped<IStoreService, StoreService>();
             services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IPaymentsService, PaymentsService>();
+            services.AddScoped<IBillService, BillService>();
+            services.AddSingleton<List<PaymentsItem>>();
+
             return services;
         }
     }

@@ -1,4 +1,5 @@
-﻿using onion_architecture.Application.Dto.Category;
+﻿using onion_architecture.Application.Dto.Bill;
+using onion_architecture.Application.Dto.Category;
 using onion_architecture.Application.Helper;
 using onion_architecture.Application.Wrappers.Concrete;
 using System;
@@ -11,7 +12,7 @@ namespace onion_architecture.Application.IService
 {
     public interface ICategoryService
     {
-        PagedDataResponse<CategoryQuery> Items(CommonListQuery commonList);      
+        PagedDataResponse<CategoryQuery> Items(CommonListQuery commonList);
         DataResponse<CategoryQuery> Create(CategoryCreate dto);
         DataResponse<CategoryQuery> Update(CategoryCreate dto);
         DataResponse<CategoryQuery> Delete(long id);

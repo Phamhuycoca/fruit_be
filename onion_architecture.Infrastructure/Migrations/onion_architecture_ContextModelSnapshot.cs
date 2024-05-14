@@ -22,6 +22,110 @@ namespace onion_architecture.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("onion_architecture.Domain.Entity.Bill", b =>
+                {
+                    b.Property<long>("BillId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("BillId"), 1L, 1);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Bill_Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Payments")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Total_amount")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("createdAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("createdBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("deletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("deletedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("updatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("updatedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("BillId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Bills", (string)null);
+                });
+
+            modelBuilder.Entity("onion_architecture.Domain.Entity.Bill_Detail", b =>
+                {
+                    b.Property<long?>("Bill_Detail_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long?>("Bill_Detail_Id"), 1L, 1);
+
+                    b.Property<long?>("BillId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("FruitId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<long?>("Quantity")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("createdAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("createdBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("deletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("deletedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("updatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("updatedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Bill_Detail_Id");
+
+                    b.HasIndex("BillId");
+
+                    b.HasIndex("FruitId");
+
+                    b.ToTable("Bill_Details", (string)null);
+                });
+
             modelBuilder.Entity("onion_architecture.Domain.Entity.Cart", b =>
                 {
                     b.Property<long>("CartId")
@@ -329,6 +433,31 @@ namespace onion_architecture.Infrastructure.Migrations
                     b.ToTable("User", (string)null);
                 });
 
+            modelBuilder.Entity("onion_architecture.Domain.Entity.Bill", b =>
+                {
+                    b.HasOne("onion_architecture.Domain.Entity.User", "User")
+                        .WithMany("Bills")
+                        .HasForeignKey("UserId")
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("onion_architecture.Domain.Entity.Bill_Detail", b =>
+                {
+                    b.HasOne("onion_architecture.Domain.Entity.Bill", "Bill")
+                        .WithMany("Bill_Details")
+                        .HasForeignKey("BillId");
+
+                    b.HasOne("onion_architecture.Domain.Entity.Fruit", "Fruit")
+                        .WithMany("Bill_Details")
+                        .HasForeignKey("FruitId");
+
+                    b.Navigation("Bill");
+
+                    b.Navigation("Fruit");
+                });
+
             modelBuilder.Entity("onion_architecture.Domain.Entity.Cart", b =>
                 {
                     b.HasOne("onion_architecture.Domain.Entity.Fruit", "Fruit")
@@ -380,6 +509,11 @@ namespace onion_architecture.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("onion_architecture.Domain.Entity.Bill", b =>
+                {
+                    b.Navigation("Bill_Details");
+                });
+
             modelBuilder.Entity("onion_architecture.Domain.Entity.Category", b =>
                 {
                     b.Navigation("Fruits");
@@ -387,6 +521,8 @@ namespace onion_architecture.Infrastructure.Migrations
 
             modelBuilder.Entity("onion_architecture.Domain.Entity.Fruit", b =>
                 {
+                    b.Navigation("Bill_Details");
+
                     b.Navigation("Carts");
                 });
 
@@ -399,6 +535,8 @@ namespace onion_architecture.Infrastructure.Migrations
 
             modelBuilder.Entity("onion_architecture.Domain.Entity.User", b =>
                 {
+                    b.Navigation("Bills");
+
                     b.Navigation("Carts");
 
                     b.Navigation("Refresh_Tokens");

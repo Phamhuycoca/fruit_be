@@ -14,17 +14,19 @@ using onion_architecture.Infrastructure.Exceptions;
 using Microsoft.OpenApi.Models;
 using onion_architecture.Infrastructure.Settings;
 using CloudinaryDotNet;
+using onion_architecture.Application.Common.ZaloPay;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-//builder.Services.AddControllers();
-builder.Services.AddControllers(options =>
+builder.Services.AddControllers();
+/*builder.Services.AddControllers(options =>
 {
     options.Filters.Add(typeof(ValidationFilter));
 }).AddFluentValidation();
-
+*/
+builder.Services.AddSingleton<IVnPayService, VnPayService>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

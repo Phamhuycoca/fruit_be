@@ -11,6 +11,7 @@ using onion_architecture.Application.Dto.Fruit;
 using onion_architecture.Application.Features.Auth;
 using onion_architecture.Application.Dto.Store;
 using onion_architecture.Application.Dto.Cart;
+using onion_architecture.Application.Dto.Bill;
 
 namespace onion_architecture.Application.Mapping
 {
@@ -40,6 +41,8 @@ namespace onion_architecture.Application.Mapping
             CreateMap<Cart, CartDto>().ReverseMap();
             CreateMap<Cart, CartFruit>().ReverseMap();
 
+            CreateMap<Bill, BillDto>().ReverseMap();
+            CreateMap<Bill, BillQuery>().ReverseMap();
 
 
         }
