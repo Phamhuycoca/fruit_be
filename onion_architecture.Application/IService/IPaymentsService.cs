@@ -13,7 +13,9 @@ namespace onion_architecture.Application.IService
     public interface IPaymentsService
     {
         PagedDataResponse<PaymentsItem> Items(CommonListQuery commonList);
+        List<PaymentsItem> CartItems();
         DataResponse<PaymentsItem> Payments(PaymentsItem dto);
         DataResponse<PaymentsItem> Remove(long id);
+        bool RemoveAll();
     }
 }

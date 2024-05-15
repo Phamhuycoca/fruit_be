@@ -12,7 +12,7 @@ namespace onion_architecture.Application.IService
 {
     public interface IBillService
     {
-        PagedDataResponse<BillQuery> Items(CommonListQuery commonList);
+        PagedDataResponse<BillQuery> Items(CommonListQuery commonList,long id);
         DataResponse<BillQuery> Create(BillDto dto);
         DataResponse<BillQuery> Update(BillDto dto);
         DataResponse<BillQuery> Delete(long id);

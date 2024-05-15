@@ -49,9 +49,11 @@ namespace onion_architecture.Application.Service
             throw new NotImplementedException();
         }
 
-        public PagedDataResponse<BillQuery> Items(CommonListQuery commonList)
+        public PagedDataResponse<BillQuery> Items(CommonListQuery commonList,long id)
         {
-            throw new NotImplementedException();
+            var query = _mapper.Map<List<BillQuery>>(_billRepository.GetAll().Where(x=>x.UserId==id));
+            var paginatedResult = PaginatedList<BillQuery>.ToPageList(query, commonList.page, commonList.limit);
+            return new PagedDataResponse<BillQuery>(paginatedResult, 200, query.Count());
         }
 
         public DataResponse<BillQuery> Update(BillDto dto)

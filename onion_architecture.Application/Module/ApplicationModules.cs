@@ -37,6 +37,7 @@ namespace onion_architecture.Application.Module
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<IPaymentsService, PaymentsService>();
             services.AddScoped<IBillService, BillService>();
+            services.AddScoped<IBill_DetailService, Bill_DetailService>();
             services.AddSingleton<List<PaymentsItem>>();
 
             return services;

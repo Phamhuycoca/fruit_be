@@ -74,5 +74,36 @@ namespace onion_architecture.Application.Service
             return new DataResponse<PaymentsItem>(pay, 200, "Thành công");
         }
 
+        public List<PaymentsItem> CartItems()
+        {
+            var query = _items.ToList();
+            var fruits = _fruitRepository.GetAll();
+            var querys = from qr in query
+                         join fruit in fruits on qr.FruitId equals fruit.FruitId
+                         select new PaymentsItem
+                         {
+                             FruitId = qr.FruitId,
+                             CartId = qr.CartId,
+                             FruitPrice = qr.FruitPrice,
+                             Quantity = qr.Quantity,
+                             StoreId = qr.StoreId,
+                             UserId = qr.UserId,
+                             Payment_Price = qr.Payment_Price,
+                             FruitImg = fruit.FruitImg,
+                             FruitName = fruit.FruitName,
+                         };
+            return querys.ToList();
+
+        }
+
+        public bool RemoveAll()
+        {
+            _items.Clear();
+            if (_items.Count() > 0)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

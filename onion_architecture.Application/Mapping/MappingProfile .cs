@@ -12,6 +12,7 @@ using onion_architecture.Application.Features.Auth;
 using onion_architecture.Application.Dto.Store;
 using onion_architecture.Application.Dto.Cart;
 using onion_architecture.Application.Dto.Bill;
+using onion_architecture.Application.Dto.Bill_Detail;
 
 namespace onion_architecture.Application.Mapping
 {
@@ -43,6 +44,9 @@ namespace onion_architecture.Application.Mapping
 
             CreateMap<Bill, BillDto>().ReverseMap();
             CreateMap<Bill, BillQuery>().ReverseMap();
+
+            CreateMap<Bill_Detail,Bill_DetailDto>().ReverseMap();
+            CreateMap<Bill_Detail,Bill_DetailQuery>().ReverseMap();
 
 
         }
