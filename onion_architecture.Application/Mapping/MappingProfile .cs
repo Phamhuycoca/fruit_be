@@ -47,6 +47,7 @@ namespace onion_architecture.Application.Mapping
 
             CreateMap<Bill_Detail,Bill_DetailDto>().ReverseMap();
             CreateMap<Bill_Detail,Bill_DetailQuery>().ReverseMap();
+            CreateMap<Bill_Detail, Bill_Detail_Fruit>().ReverseMap();
 
 
         }

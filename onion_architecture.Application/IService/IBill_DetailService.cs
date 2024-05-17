@@ -13,6 +13,7 @@ namespace onion_architecture.Application.IService
     public interface IBill_DetailService
     {
         PagedDataResponse<Bill_DetailQuery> Items(CommonListQuery commonList);
+        List<Bill_Detail_Fruit> ItemsById(long id);
         DataResponse<Bill_DetailQuery> Create(Bill_DetailDto dto);
         DataResponse<Bill_DetailQuery> Update(Bill_DetailDto dto);
         DataResponse<Bill_DetailQuery> Delete(long id);
