@@ -75,6 +75,7 @@ namespace onion_architecture.Infrastructure.Context
                 e.HasKey(e => e.Bill_Detail_Id);
                 e.HasOne(e => e.Fruit).WithMany(e => e.Bill_Details).HasForeignKey(e => e.FruitId).OnDelete(DeleteBehavior.ClientSetNull);
                 e.HasOne(e => e.Bill).WithMany(e => e.Bill_Details).HasForeignKey(e => e.BillId).OnDelete(DeleteBehavior.ClientSetNull);
+                e.HasOne(e => e.Store).WithMany(e => e.bill_Details).HasForeignKey(e => e.StoreId).OnDelete(DeleteBehavior.ClientSetNull);
             });
         }
     }

@@ -17,5 +17,7 @@ namespace onion_architecture.Application.IService
         DataResponse<BillQuery> Update(BillDto dto);
         DataResponse<BillQuery> Delete(long id);
         DataResponse<BillQuery> GetById(long id);
+        PagedDataResponse<BillQuery> ItemsStatus0(CommonListQuery commonList);
+
     }
 }

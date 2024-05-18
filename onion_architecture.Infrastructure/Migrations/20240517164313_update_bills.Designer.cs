@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using onion_architecture.Infrastructure.Context;
 
@@ -11,9 +12,10 @@ using onion_architecture.Infrastructure.Context;
 namespace onion_architecture.Infrastructure.Migrations
 {
     [DbContext(typeof(onion_architecture_Context))]
-    partial class onion_architecture_ContextModelSnapshot : ModelSnapshot
+    [Migration("20240517164313_update_bills")]
+    partial class update_bills
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,6 +50,9 @@ namespace onion_architecture.Infrastructure.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long?>("StoreId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Total_amount")
                         .HasColumnType("nvarchar(max)");
 
@@ -74,6 +79,8 @@ namespace onion_architecture.Infrastructure.Migrations
 
                     b.HasKey("BillId");
 
+                    b.HasIndex("StoreId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Bills", (string)null);
@@ -99,9 +106,6 @@ namespace onion_architecture.Infrastructure.Migrations
                     b.Property<long?>("Quantity")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("StoreId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime2");
 
@@ -125,8 +129,6 @@ namespace onion_architecture.Infrastructure.Migrations
                     b.HasIndex("BillId");
 
                     b.HasIndex("FruitId");
-
-                    b.HasIndex("StoreId");
 
                     b.ToTable("Bill_Details", (string)null);
                 });
@@ -440,10 +442,16 @@ namespace onion_architecture.Infrastructure.Migrations
 
             modelBuilder.Entity("onion_architecture.Domain.Entity.Bill", b =>
                 {
+                    b.HasOne("onion_architecture.Domain.Entity.Store", "Store")
+                        .WithMany("Bills")
+                        .HasForeignKey("StoreId");
+
                     b.HasOne("onion_architecture.Domain.Entity.User", "User")
                         .WithMany("Bills")
                         .HasForeignKey("UserId")
                         .IsRequired();
+
+                    b.Navigation("Store");
 
                     b.Navigation("User");
                 });
@@ -458,15 +466,9 @@ namespace onion_architecture.Infrastructure.Migrations
                         .WithMany("Bill_Details")
                         .HasForeignKey("FruitId");
 
-                    b.HasOne("onion_architecture.Domain.Entity.Store", "Store")
-                        .WithMany("bill_Details")
-                        .HasForeignKey("StoreId");
-
                     b.Navigation("Bill");
 
                     b.Navigation("Fruit");
-
-                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("onion_architecture.Domain.Entity.Cart", b =>
@@ -539,11 +541,11 @@ namespace onion_architecture.Infrastructure.Migrations
 
             modelBuilder.Entity("onion_architecture.Domain.Entity.Store", b =>
                 {
+                    b.Navigation("Bills");
+
                     b.Navigation("Carts");
 
                     b.Navigation("Fruits");
-
-                    b.Navigation("bill_Details");
                 });
 
             modelBuilder.Entity("onion_architecture.Domain.Entity.User", b =>

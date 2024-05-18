@@ -12,5 +12,6 @@ namespace onion_architecture.Application.Dto.Bill_Detail
         public long? BillId { get; set; }
         public long? FruitId { get; set; }
         public long? Quantity { get; set; }
+        public long? StoreId { get; set; }
     }
 }

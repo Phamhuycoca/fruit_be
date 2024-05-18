@@ -13,6 +13,8 @@ namespace onion_architecture.Domain.Entity
         public long? BillId { get; set; }
         public long? FruitId { get; set; }
         public long? Quantity { get; set; }
+        public long? StoreId { get; set; }
+        public Store? Store { get; set; }
         public Fruit? Fruit { get; set;}
         public Bill? Bill { get; set; }
     }

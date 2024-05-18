@@ -18,6 +18,7 @@ namespace onion_architecture.Domain.Entity
         public string? StorePhone{ get; set; }
         public ICollection<Fruit>? Fruits { get; set;}
         public ICollection<Cart>? Carts { get; set; }
+        public ICollection<Bill_Detail>? bill_Details { get; set; }
 
     }
 }
