@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using onion_architecture.Application.Common.ZaloPay;
 using onion_architecture.Application.Dto.Bill;
@@ -25,7 +26,8 @@ namespace onion_architecture.Api.Controllers.Bill
         private readonly IBill_DetailService _bill_DetailService;
         private readonly ICartRepository _cartRepository;
         private readonly IFruitRepository _fruitRepository;
-        public BillController(IBillService billService, IVnPayService vnPayService, IPaymentsService paymentsService, IBill_DetailRepository bill_DetailRepository, IBill_DetailService bill_DetailService, ICartRepository cartRepository, IFruitRepository fruitRepository)
+        private readonly IMapper _mapper;
+        public BillController(IBillService billService, IVnPayService vnPayService, IPaymentsService paymentsService, IBill_DetailRepository bill_DetailRepository, IBill_DetailService bill_DetailService, ICartRepository cartRepository, IFruitRepository fruitRepository,IMapper mapper)
         {
             _billService = billService;
             _vpnPayService = vnPayService;
@@ -34,6 +36,7 @@ namespace onion_architecture.Api.Controllers.Bill
             _bill_DetailService = bill_DetailService;
             _cartRepository = cartRepository;
             _fruitRepository = fruitRepository;
+            _mapper = mapper;
         }
         [HttpPost("Pay")]
         public IActionResult Pay([FromBody] BillDto dto)
@@ -56,18 +59,18 @@ namespace onion_architecture.Api.Controllers.Bill
                     OrderId = new Random().Next(1000, 100000)
                 };
                 var rq = _vpnPayService.CreatePaymentUrl(HttpContext, vnPayModel);
-                dto.Bill_Status = 1;
+                dto.Bill_Status = 0;
                 var bill = _billService.Create(dto);
                 foreach (var item in _paymentsService.CartItems())
                 {
-                        var bill_detail = new Bill_DetailDto()
-                        {
-                            BillId = bill.Data.BillId,
-                            FruitId = item.FruitId,
-                            Quantity = item.Quantity,
-                            StoreId=_fruitRepository.GetById(item.FruitId).StoreId,
-                        };
-                        _bill_DetailService.Create(bill_detail);
+                    var bill_detail = new Bill_DetailDto()
+                    {
+                        BillId = bill.Data.BillId,
+                        FruitId = item.FruitId,
+                        Quantity = item.Quantity,
+                        StoreId = _fruitRepository.GetById(item.FruitId).StoreId,
+                    };
+                    _bill_DetailService.Create(bill_detail);
                     _cartRepository.Delete(item.CartId);
                 }
                 _paymentsService.RemoveAll();
@@ -109,6 +112,84 @@ namespace onion_architecture.Api.Controllers.Bill
         {
             return Ok(_billService.ItemsStatus0(query));
         }
+        [HttpPatch("UpdateStatus")]
+        public IActionResult UpdateStatus()
+        {
+            return Ok(_billService.UpdateStatus());
 
+        }
+        [HttpPost("Paynow")]
+        public IActionResult Paynow(payNow dto)
+        {
+            var objId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (objId == null)
+            {
+                throw new ApiException(HttpStatusCode.FORBIDDEN, HttpStatusMessages.Forbidden);
+            }
+            dto.Bill_Status = 0;
+            dto.UserId = long.Parse(objId);
+            if (dto.Payments == "Thanh toán bằng VNPay")
+            {
+                var vnPayModel = new VnPaymentRequestModel
+                {
+                    Amount = dto.Total_amount,
+                    CreatedDate = DateTime.Now,
+                    Description = $"{dto.FullName} {dto.Phone}",
+                    FullName = dto.FullName,
+                    OrderId = new Random().Next(1000, 100000)
+                };
+                var rq = _vpnPayService.CreatePaymentUrl(HttpContext, vnPayModel);
+                dto.Bill_Status = 0;
+                var billDto = new BillDto()
+                {
+                    Address=dto.Address,
+                    BillId= dto.BillId,
+                    Bill_Status= 0,
+                    FullName=dto.FullName,
+                   Payments=dto.Payments,
+                   Phone=dto.Phone,
+                   Total_amount=dto.Total_amount,
+                   UserId= dto.UserId,
+                };
+                var bill = _billService.Create(billDto);
+                var item = _fruitRepository.GetById(dto.FruitId.Value);
+                var bill_detail = new Bill_DetailDto()
+                {
+                    BillId = bill.Data.BillId,
+                    FruitId = item.FruitId,
+                    Quantity = 1,
+                    StoreId = _fruitRepository.GetById(item.FruitId).StoreId,
+                };
+                _bill_DetailService.Create(bill_detail);
+                return Ok(new { data = rq, success = true, message = "Vui lòng quét mã" });
+
+            }
+            else
+            {
+                dto.Bill_Status = 0;
+                var billDto = new BillDto()
+                {
+                    Address = dto.Address,
+                    BillId = dto.BillId,
+                    Bill_Status = 0,
+                    FullName = dto.FullName,
+                    Payments = dto.Payments,
+                    Phone = dto.Phone,
+                    Total_amount = dto.Total_amount,
+                    UserId = dto.UserId,
+                };
+                var bill = _billService.Create(billDto);
+                var item = _fruitRepository.GetById(dto.FruitId.Value);
+                var bill_detail = new Bill_DetailDto()
+                {
+                    BillId = bill.Data.BillId,
+                    FruitId = item.FruitId,
+                    Quantity = 1,
+                    StoreId = _fruitRepository.GetById(item.FruitId).StoreId,
+                };
+                _bill_DetailService.Create(bill_detail);
+                return Ok(bill);
+            }
+        }
     }
 }

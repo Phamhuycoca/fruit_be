@@ -67,5 +67,24 @@ namespace onion_architecture.Application.Service
         {
             throw new NotImplementedException();
         }
+
+        public DataResponse<List<BillQuery>> UpdateStatus()
+        {
+            var query = _mapper.Map<List<BillStatus>>(_billRepository.GetAll().Where(x => x.Bill_Status == 0));
+            if (query == null)
+            {
+                throw new ApiException(404, "Không có dữ liệu cần duyệt");
+            }
+            var list=new List<BillQuery>();
+            foreach(var item in query)
+            {
+                var data = _billRepository.GetById(item.BillId);
+                item.Bill_Status = 1;
+                var newData=_billRepository.Update(_mapper.Map(item,data));
+                list.Add(_mapper.Map<BillQuery>(newData));
+            }
+            return new DataResponse<List<BillQuery>>(list, 200, "Thanh duyệt danh sách thành công");
+
+        }
     }
 }

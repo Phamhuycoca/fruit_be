@@ -18,6 +18,8 @@ namespace onion_architecture.Application.IService
         DataResponse<BillQuery> Delete(long id);
         DataResponse<BillQuery> GetById(long id);
         PagedDataResponse<BillQuery> ItemsStatus0(CommonListQuery commonList);
+        DataResponse<List<BillQuery>> UpdateStatus();
+
 
     }
 }

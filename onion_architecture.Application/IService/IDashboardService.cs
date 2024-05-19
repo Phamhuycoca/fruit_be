@@ -13,6 +13,7 @@ namespace onion_architecture.Application.IService
     {
         DataResponse<List<Store_Dashboard>> StoreDashboard();
         DataResponse<Bill_Dashboard> BillDashboard();
+        DataResponse<Totals> TotalDashboard();
 
     }
 }

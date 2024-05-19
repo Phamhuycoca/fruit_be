@@ -23,5 +23,10 @@ namespace onion_architecture.Api.Controllers.Dashboard
         {
             return Ok(_dashboardService.BillDashboard());
         }
+        [HttpGet("Totals")]
+        public IActionResult Totals()
+        {
+            return Ok(_dashboardService.TotalDashboard());
+        }
     }
 }

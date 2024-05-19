@@ -78,5 +78,16 @@ namespace onion_architecture.Application.Service
             }
             return new DataResponse<List<Store_Dashboard>>(list, HttpStatusCode.OK, HttpStatusMessages.OK);
         }
+
+        public DataResponse<Totals> TotalDashboard()
+        {
+            var total=new Totals()
+            { 
+                bill_count= _billRepository.GetAll().Sum(x => long.Parse(x.Total_amount)),
+                fruit_count= _billDetailRepository.GetAll().Select(x => x.FruitId).Count()
+            };
+            return new DataResponse<Totals>(total, HttpStatusCode.OK, HttpStatusMessages.OK);
+
+        }
     }
 }
